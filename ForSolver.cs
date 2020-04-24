@@ -2,6 +2,7 @@
 {
     public class ForSolver
     {
+        public int count { get; set; }
         public double[] Ii { get; set; }
         public double[] w { get; set; }
         public double[] b { get; set; }

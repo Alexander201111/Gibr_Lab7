@@ -54,11 +54,6 @@ namespace Gibr_Lab7
             app.UseOpenApi();
             app.UseSwaggerUi3();
 
-            //app.UseSwaggerUi3(settings =>
-            //{
-            //    settings.SwaggerRoute = "/swagger/swagger.json";
-            //});
-
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>

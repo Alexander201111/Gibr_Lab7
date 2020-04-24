@@ -31,7 +31,7 @@ export class Main extends Component {
     }
 
     componentDidMount() {
-        //this.populateWeatherData();
+
     }
 
     changeCountParams = (event) => {
@@ -140,18 +140,11 @@ export class Main extends Component {
     }
 
     async populateWeatherData() {
-        const data = {
-            Ii: this.state.Ii,
-            w: this.state.w,
-            d: this.state.d,
-            b: this.state.b,
-            A: this.state.A
-        };
-
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
+                count: this.state.paramsCout,
                 Ii: this.state.Ii,
                 w: this.state.w,
                 d: this.state.d,
@@ -160,7 +153,7 @@ export class Main extends Component {
             })
         };
         console.log(requestOptions)
-        const response = await fetch('weatherforecast', requestOptions);
+        const response = await fetch('solver', requestOptions);
         const result = await response.json();
         console.log(result);
         this.setState({ result });

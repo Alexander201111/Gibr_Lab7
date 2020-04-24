@@ -8,10 +8,10 @@ namespace Gibr_Lab7.Solver
 {
     public class Calculator
     {
-        public double[] Solving(double[] Ii, double[] w, double[] d, double[] b, double[][] A)
+        public double[] Solving(int count, double[] Ii, double[] w, double[] d, double[] b, double[][] A)
         {
-            double[,] I = new double[7, 7];
-            double[,] W = new double[7, 7];
+            double[,] I = new double[count, count];
+            double[,] W = new double[count, count];
             for (int i = 0; i < w.Length; i++)
             {
                 for (int j = 0; j < w.Length; j++)
@@ -30,10 +30,12 @@ namespace Gibr_Lab7.Solver
             }
             double[,] Q = Accord.Math.Matrix.Dot(W, I);
 
-            double[] D = new double[7];
-            for (int i = 0; i < 7; i++)
+            double[] D = new double[count];
+            int[] VariablesAtIndices = new int[count];
+            for (int i = 0; i < count; i++)
             {
                 D[i] = d[i] * Q[i, i];
+                VariablesAtIndices[i] = i;
             }
 
             List<double[]> combinedAs = new List<double[]>();
@@ -47,12 +49,10 @@ namespace Gibr_Lab7.Solver
                 combinedAs.Add(a);
             }
 
-            Console.WriteLine(W[0, 0].ToString(), W[1, 1].ToString(), W[2, 2].ToString());
-            int[] VariablesAtIndices = { 0, 1, 2, 3, 4, 5, 6 };
             List<LinearConstraint> constraints = new List<LinearConstraint>();
             for (int i = 0; i < 3; i++)
             {
-                LinearConstraint linear = new LinearConstraint(numberOfVariables: 7)
+                LinearConstraint linear = new LinearConstraint(numberOfVariables: count)
                 {
                     VariablesAtIndices = VariablesAtIndices,
                     CombinedAs = combinedAs[i],
