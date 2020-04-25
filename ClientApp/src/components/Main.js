@@ -8,6 +8,7 @@ export class Main extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            mode: 1,
             paramsCout: 7,
             Ii: [1, 1, 1, 1, 1, 1, 1],
             w: [0.2, 0.121, 0.683, 0.04, 0.102, 0.081, 0.02],
@@ -18,7 +19,7 @@ export class Main extends Component {
                 1.98478460320379,
                 5.09293357450987,
                 4.05721328676762,
-                0.991215230484718
+                0.991215230484718,
             ],
             b: [0, 0, 0],
             A: [
@@ -27,11 +28,8 @@ export class Main extends Component {
                 [0, 0, 0, 0, 1, -1, -1],
             ],
             result: [],
+            extra: [],
         };
-    }
-
-    componentDidMount() {
-
     }
 
     changeCountParams = (event) => {
@@ -40,11 +38,12 @@ export class Main extends Component {
     }
 
     setCountParams = () => {
-
+        const result = [];
         const Ii = new Array(this.state.paramsCout);
         const w = new Array(this.state.paramsCout);
         const d = new Array(this.state.paramsCout);
         const b = new Array(this.state.paramsCout);
+        const extra = [0, 0];
         for (let i = 0; i < this.state.paramsCout; i++) {
             Ii[i] = 0;
             w[i] = 0;
@@ -59,7 +58,84 @@ export class Main extends Component {
             }
             A.push(a);
         }
-        this.setState({ Ii, w, d, b, A });
+        this.setState({ Ii, w, d, b, A, extra, result });
+    }
+
+    initDataForTask = (val) => {
+        const mode = val;
+        const result = [];
+        switch (val) {
+            case 1: {
+                const paramsCout = 7;
+                const Ii = [1, 1, 1, 1, 1, 1, 1];
+                const w = [0.2, 0.121, 0.683, 0.04, 0.102, 0.081, 0.02];
+                const d = [
+                    10.0054919341489,
+                    3.03265795024749,
+                    6.83122010827837,
+                    1.98478460320379,
+                    5.09293357450987,
+                    4.05721328676762,
+                    0.991215230484718,
+                ];
+                const b = [0, 0, 0];
+                const A = [
+                    [1, -1, -1, 0, 0, 0, 0],
+                    [0, 0, 1, -1, -1, 0, 0],
+                    [0, 0, 0, 0, 1, -1, -1],
+                ];
+                this.setState({ mode, paramsCout, Ii, w, d, b, A, result });
+                break;
+            }
+            case 2: {
+                const paramsCout = 8;
+                const Ii = [1, 1, 1, 1, 1, 1, 1, 1];
+                const w = [0.2, 0.121, 0.683, 0.04, 0.102, 0.081, 0.02, 0.667];
+                const d = [
+                    10.0054919341489,
+                    3.03265795024749,
+                    6.83122010827837,
+                    1.98478460320379,
+                    5.09293357450987,
+                    4.05721328676762,
+                    0.991215230484718,
+                    6.66666666666666,
+                ];
+                const b = [0, 0, 0];
+                const A = [
+                    [1, -1, -1, 0, 0, 0, 0, 0],
+                    [0, 0, 1, -1, -1, 0, 0, 0],
+                    [0, 0, 0, 0, 1, -1, -1, 1],
+                ];
+                this.setState({ mode, paramsCout, Ii, w, d, b, A, result });
+                break;
+            }
+            case 3: {
+                const paramsCout = 8;
+                const Ii = [1, 1, 1, 1, 1, 1, 1, 1];
+                const w = [0.2, 0.121, 0.683, 0.04, 0.102, 0.081, 0.02, 0.667];
+                const d = [
+                    10.0054919341489,
+                    3.03265795024749,
+                    6.83122010827837,
+                    1.98478460320379,
+                    5.09293357450987,
+                    4.05721328676762,
+                    0.991215230484718,
+                    6.66666666666666,
+                ];
+                const b = [0, 0, 0];
+                const A = [
+                    [1, -1, -1, 0, 0, 0, 0, 0],
+                    [0, 0, 1, -1, -1, 0, 0, 0],
+                    [0, 0, 0, 0, 1, -1, -1, 1],
+                ];
+                const extra = [ 1, -10 ];
+                this.setState({ mode, paramsCout, Ii, w, d, b, A, extra, result });
+                break;
+            }
+            default: return;
+        }
     }
 
     render() {
@@ -70,6 +146,10 @@ export class Main extends Component {
                     Количество:
                     <TextField value={paramsCout} onChange={this.changeCountParams} style={{ marginLeft: "10px", marginRight: "10px" }} id="standard-basic" />
                     <Button variant="contained" color="primary" onClick={() => this.setCountParams()}>Построить</Button>
+
+                    <Button style={{ marginLeft: "20px" }} variant="contained" color="primary" onClick={() => this.initDataForTask(1)}>Original</Button>
+                    <Button style={{ marginLeft: "5px", marginRight: "5px" }} variant="contained" color="primary" onClick={() => this.initDataForTask(2)}>V2</Button>
+                    <Button variant="contained" color="primary" onClick={() => this.initDataForTask(3)}>T3</Button>
                 </div>
 
                 <div style={{ display: "flex", marginTop: "15px" }}>
@@ -121,6 +201,15 @@ export class Main extends Component {
                     </div>
                 </div>
 
+                {this.state.mode === 3 && (<div style={{ display: "flex", marginTop: "15px" }}>
+                    <b style={{ width: "90px" }} >Доп. значения: </b>
+                    <div style={{ display: "flex", border: "solid black 3px", width: "30%" }}>
+                        {this.state.extra.map((i, index) => (
+                            <TextField style={{ border: "solid black 1px", marginLeft: "10px" }} value={i} id="standard-basic" />
+                        ))}
+                    </div>
+                </div>)}
+
                 <Button style={{ marginTop: "15px", marginLeft: "10px" }} variant="contained" color="primary" onClick={() => this.populateWeatherData()}>Решить</Button>
 
                 {this.state.result && this.state.result.length ? (
@@ -149,10 +238,10 @@ export class Main extends Component {
                 w: this.state.w,
                 d: this.state.d,
                 b: this.state.b,
-                A: this.state.A
+                A: this.state.A,
+                extra: this.state.mode === 3 ? this.state.extra : null,
             })
         };
-        console.log(requestOptions)
         const response = await fetch('solver', requestOptions);
         const result = await response.json();
         console.log(result);

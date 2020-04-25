@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Accord.Math.Optimization;
 
 namespace Gibr_Lab7.Solver
 {
-    public class Calculator
+    public class Calculator : ICalculator
     {
-        public double[] Solving(int count, double[] Ii, double[] w, double[] d, double[] b, double[][] A)
+        public double[] Solving(int count, double[] Ii, double[] w, double[] d, double[] b, double[][] A, LinearConstraint newConstraints = null)
         {
             double[,] I = new double[count, count];
             double[,] W = new double[count, count];
@@ -34,7 +31,7 @@ namespace Gibr_Lab7.Solver
             int[] VariablesAtIndices = new int[count];
             for (int i = 0; i < count; i++)
             {
-                D[i] = d[i] * Q[i, i];
+                D[i] = -1 * d[i] * Q[i, i];
                 VariablesAtIndices[i] = i;
             }
 
@@ -60,6 +57,11 @@ namespace Gibr_Lab7.Solver
                     Value = b[i]
                 };
                 constraints.Add(linear);
+            }
+
+            if (newConstraints != null)
+            {
+                constraints.Add(newConstraints);
             }
 
             var solver = new GoldfarbIdnani(

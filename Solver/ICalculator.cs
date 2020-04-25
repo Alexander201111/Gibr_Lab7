@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Accord.Math.Optimization;
 
 namespace Gibr_Lab7.Solver
 {
     interface ICalculator
     {
-        double[] Solving(double[] Ii, double[] w, double[] d, double[] b, double[,] A);
+        public double[] Solving(int count, double[] Ii, double[] w, double[] d, double[] b, double[][] A, LinearConstraint newConstraints = null);
     }
 }

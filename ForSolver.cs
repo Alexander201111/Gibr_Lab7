@@ -8,5 +8,6 @@
         public double[] b { get; set; }
         public double[] d { get; set; }
         public double[][] A { get; set; }
+        public double[] extra { get; set; }
     }
 }
