@@ -27,8 +27,9 @@ export class Main extends Component {
                 [0, 0, 1, -1, -1, 0, 0],
                 [0, 0, 0, 0, 1, -1, -1],
             ],
-            result: [],
             extra: [],
+            result: [],
+            check: false,
         };
     }
 
@@ -130,7 +131,7 @@ export class Main extends Component {
                     [0, 0, 1, -1, -1, 0, 0, 0],
                     [0, 0, 0, 0, 1, -1, -1, 1],
                 ];
-                const extra = [ 1, -10 ];
+                const extra = [1, -10];
                 this.setState({ mode, paramsCout, Ii, w, d, b, A, extra, result });
                 break;
             }
@@ -138,8 +139,55 @@ export class Main extends Component {
         }
     }
 
+    changeValue = (par, event, index1, index2 = undefined) => {
+        const value = +event.target.value;
+        switch(par) {
+            case 'Ii': {
+                this.state.Ii[index1] = value;
+                this.setState({ Ii: this.state.Ii });
+                break;
+            };
+            case 'w': {
+                this.state.w[index1] = value;
+                this.setState({ w: this.state.w });
+                break;
+            };
+            case 'd': {
+                this.state.d[index1] = value;
+                this.setState({ d: this.state.d });
+                break;
+            };
+            case 'b': {
+                this.state.b[index1] = value;
+                this.setState({ b: this.state.b });
+                break;
+            };
+            case 'A': {
+                this.state.A[index1][index2] = value;
+                this.setState({ A: this.state.A });
+                break;
+            };
+            case 'extra': {
+                this.state.extra[index1] = value;
+                this.setState({ extra: this.state.extra });
+                break;
+            };
+        }
+    }
+
     render() {
         const paramsCout = this.state.paramsCout;
+        const reducibility = ["", "", ""];
+        const reducibilityNums = [0, 0, 0];
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < this.state.paramsCout; j++) {
+                if (this.state.A[i][j] !== 0) {
+                    reducibility[i] += (this.state.A[i][j] * this.state.result[j]).toString();
+                    reducibilityNums[i] += this.state.A[i][j] * this.state.result[j];
+                }
+            }
+            reducibilityNums[i] = Math.round(reducibilityNums[i]);
+        }
         return (
             <div>
                 <div style={{ display: "flex", alignItems: "baseline" }}>
@@ -156,7 +204,7 @@ export class Main extends Component {
                     <b style={{ width: "30px" }} >i:</b>
                     <div style={{ display: "flex", border: "solid black 3px", width: "40%" }}>
                         {this.state.Ii.map((i, index) => (
-                            <TextField style={{ border: "solid black 1px", marginLeft: "10px" }} value={i} id="standard-basic" />
+                            <TextField onChange={(event) => this.changeValue("Ii", event, index)} style={{ border: "solid black 1px", marginLeft: "10px" }} value={i} id="standard-basic" />
                         ))}
                     </div>
                 </div>
@@ -165,7 +213,7 @@ export class Main extends Component {
                     <b style={{ width: "30px" }} >w: </b>
                     <div style={{ display: "flex", border: "solid black 3px", width: "70%" }}>
                         {this.state.w.map((i, index) => (
-                            <TextField style={{ border: "solid black 1px", marginLeft: "10px" }} value={i} id="standard-basic" />
+                            <TextField onChange={(event) => this.changeValue("w", event, index)} style={{ border: "solid black 1px", marginLeft: "10px" }} value={i} id="standard-basic" />
                         ))}
                     </div>
                 </div>
@@ -174,7 +222,7 @@ export class Main extends Component {
                     <b style={{ width: "30px" }} >d: </b>
                     <div style={{ display: "flex", border: "solid black 3px", width: "70%" }}>
                         {this.state.d.map((i, index) => (
-                            <TextField style={{ border: "solid black 1px", marginLeft: "10px" }} value={i} id="standard-basic" />
+                            <TextField onChange={(event) => this.changeValue("d", event, index)} style={{ border: "solid black 1px", marginLeft: "10px" }} value={i} id="standard-basic" />
                         ))}
                     </div>
                 </div>
@@ -183,7 +231,7 @@ export class Main extends Component {
                     <b style={{ width: "30px" }} >b: </b>
                     <div style={{ display: "flex", border: "solid black 3px", width: "30%" }}>
                         {this.state.b.map((i, index) => (
-                            <TextField style={{ border: "solid black 1px", marginLeft: "10px" }} value={i} id="standard-basic" />
+                            <TextField onChange={(event) => this.changeValue("b", event, index)} style={{ border: "solid black 1px", marginLeft: "10px" }} value={i} id="standard-basic" />
                         ))}
                     </div>
                 </div>
@@ -191,10 +239,10 @@ export class Main extends Component {
                 <div style={{ display: "flex", marginTop: "15px" }}>
                     <b style={{ width: "30px" }} >A: </b>
                     <div style={{ border: "solid black 3px", width: "50%" }}>
-                        {this.state.A.map(elem => (
+                        {this.state.A.map((elem, index1) => (
                             <div style={{ display: "flex", /* border: "solid black 1px" */ }}>
-                                {elem.map(i => (
-                                    <TextField style={{ border: "solid black 1px", marginLeft: "10px" }} value={i} id="standard-basic" />
+                                {elem.map((i, index2) => (
+                                    <TextField onChange={(event) => this.changeValue("A", event, index1, index2)} style={{ border: "solid black 1px", marginLeft: "10px" }} value={i} id="standard-basic" />
                                 ))}
                             </div>
                         ))}
@@ -205,7 +253,7 @@ export class Main extends Component {
                     <b style={{ width: "90px" }} >Доп. значения: </b>
                     <div style={{ display: "flex", border: "solid black 3px", width: "30%" }}>
                         {this.state.extra.map((i, index) => (
-                            <TextField style={{ border: "solid black 1px", marginLeft: "10px" }} value={i} id="standard-basic" />
+                            <TextField onChange={(event) => this.changeValue("A", event, index)} style={{ border: "solid black 1px", marginLeft: "10px" }} value={i} id="standard-basic" />
                         ))}
                     </div>
                 </div>)}
@@ -213,14 +261,24 @@ export class Main extends Component {
                 <Button style={{ marginTop: "15px", marginLeft: "10px" }} variant="contained" color="primary" onClick={() => this.populateWeatherData()}>Решить</Button>
 
                 {this.state.result && this.state.result.length ? (
-                    <div style={{ display: "flex", marginTop: "15px" }}>
-                        <b style={{ width: "55px" }} >Result: </b>
-                        <div style={{ border: "solid black 3px", width: "20%" }}>
-                            {this.state.result.map((elem, index) => (
-                                <div style={{ display: "flex" }}>
-                                    x{index}={elem}
-                                </div>
-                            ))}
+                    <div>
+                        <div style={{ display: "flex", marginTop: "15px" }}>
+                            <b style={{ width: "55px" }} >Result: </b>
+                            <div style={{ border: "solid black 3px", width: "20%" }}>
+                                {this.state.result.map((elem, index) => (
+                                    <div style={{ display: "flex" }}>
+                                        x{index}={elem}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div>
+                            Баланс сводится: {this.state.check ? "ДА" : "НЕТ"}
+                            <div style={{ border: "solid black 3px" }}>
+                                {[0, 1, 2].map((e) => (
+                                    <div>{reducibility[e]}={reducibilityNums[e]}</div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 ) : null}
@@ -244,7 +302,14 @@ export class Main extends Component {
         };
         const response = await fetch('solver', requestOptions);
         const result = await response.json();
-        console.log(result);
-        this.setState({ result });
+
+        let check = true;
+        for (let i = 0; i < 3; i++) {
+            let resultForCheck = 0;
+            for (let j = 0; j < this.state.paramsCout; j++) { resultForCheck += result[j] * this.state.A[i][j]; }
+            if (Math.round(resultForCheck) != 0) { check = false; break; }
+        }
+
+        this.setState({ result, check });
     }
 }

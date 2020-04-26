@@ -7,11 +7,6 @@ namespace Gibr_Lab7Test
 {
     public class Tests
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
-
         [Test]
         public void Test_Original()
         {
@@ -29,7 +24,7 @@ namespace Gibr_Lab7Test
                 0.991215230484718
             };
             double[] b = { 0, 0, 0 };
-            double[][] A = 
+            double[][] A =
             {
                 new double[] { 1, -1, -1, 0, 0, 0, 0 },
                 new double[] { 0, 0, 1, -1, -1, 0, 0 },
@@ -38,12 +33,12 @@ namespace Gibr_Lab7Test
 
             Calculator calculator = new Calculator();
             double[] res = calculator.Solving(count, Ii, w, d, b, A);
-            bool check = false;
-            if ((Math.Round(res[0] - res[1] - res[2]) == 0) &&
-                (Math.Round(res[2] - res[3] - res[4]) == 0) &&
-                (Math.Round(res[4] - res[5] - res[6]) == 0))
+            bool check = true;
+            for (int i = 0; i < 3; i++)
             {
-                check = true;
+                double resultForCheck = 0;
+                for(int j=0; j<count; j++) { resultForCheck += res[j] * A[i][j]; }
+                if (Math.Round(resultForCheck) != 0) { check = false; break; }
             }
 
             Assert.AreEqual(true, check);
@@ -76,12 +71,12 @@ namespace Gibr_Lab7Test
 
             Calculator calculator = new Calculator();
             double[] res = calculator.Solving(count, Ii, w, d, b, A);
-            bool check = false;
-            if ((Math.Round(res[0] - res[1] - res[2]) == 0) &&
-                (Math.Round(res[2] - res[3] - res[4]) == 0) &&
-                (Math.Round(res[7] + res[4] - res[5] - res[6]) == 0))
+            bool check = true;
+            for (int i = 0; i < 3; i++)
             {
-                check = true;
+                double resultForCheck = 0;
+                for (int j = 0; j < count; j++) { resultForCheck += res[j] * A[i][j]; }
+                if (Math.Round(resultForCheck) != 0) { check = false; break; }
             }
 
             Assert.AreEqual(true, check);
@@ -122,12 +117,12 @@ namespace Gibr_Lab7Test
 
             Calculator calculator = new Calculator();
             double[] res = calculator.Solving(count, Ii, w, d, b, A, linear);
-            bool check = false;
-            if ((Math.Round(res[0] - res[1] - res[2]) == 0) &&
-                (Math.Round(res[2] - res[3] - res[4]) == 0) &&
-                (Math.Round(res[7] + res[4] - res[5] - res[6]) == 0))
+            bool check = true;
+            for (int i = 0; i < 3; i++)
             {
-                check = true;
+                double resultForCheck = 0;
+                for (int j = 0; j < count; j++) { resultForCheck += res[j] * A[i][j]; }
+                if (Math.Round(resultForCheck) != 0) { check = false; break; }
             }
 
             Assert.AreEqual(true, check);
