@@ -1,0 +1,2 @@
+build docker: docker build -t gibr_lab7 .
+run docker: docker run -p 80:80 gibr_lab7
