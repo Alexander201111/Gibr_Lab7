@@ -18,19 +18,24 @@ namespace Gibr_Lab7.Controllers
         [HttpPost]
         public double[] Solve([FromBody]ForSolver data)
         {
-            LinearConstraint linear = null;
-            if (data.extra != null)
+            List<LinearConstraint> linear = new List<LinearConstraint>();
+            for(int i=0; i<data.limitations.Length; i++)
             {
-                linear = new LinearConstraint(numberOfVariables: 2)
+                for (int j = 0; j < data.limitations[i].Length; j++)
                 {
-                    VariablesAtIndices = new int[] { 0, 1 },
-                    CombinedAs = data.extra,
-                    ShouldBe = ConstraintType.EqualTo,
-                    Value = 0
-                };
+                    ConstraintType shouldBe = j == 0 ? ConstraintType.GreaterThanOrEqualTo : ConstraintType.LesserThanOrEqualTo;
+                    double Value = data.limitations[i][j];
+                    linear.Add(new LinearConstraint(numberOfVariables: 1)
+                    {
+                        VariablesAtIndices = new int[] { i },
+                        ShouldBe = shouldBe,
+                        Value = Value
+                    });
+                }
             }
+            
             Calculator calculator = new Calculator();
-            double[] res = calculator.Solving(data.count, data.Ii, data.w, data.d, data.b, data.A, linear);
+            double[] res = calculator.Solving(data.count, data.Ii, data.w, data.d, data.b, data.A, linear, data.extra);
             return res;
         }
     }

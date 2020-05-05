@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { TextField, Button } from '@material-ui/core';
+import Extra from "./Extra";
 
 export class Main extends Component {
-
-    static displayName = Main.name;
 
     constructor(props) {
         super(props);
@@ -28,6 +27,10 @@ export class Main extends Component {
                 [0, 0, 0, 0, 1, -1, -1],
             ],
             extra: [],
+            limitations: [
+                [-100, 100], [1, 1], [0, 100], [0, 100],
+                [0, 100], [0, 100], [0, 100],
+            ],
             result: [],
             check: false,
         };
@@ -139,8 +142,12 @@ export class Main extends Component {
         }
     }
 
+    changeExtra = (extra) => {
+        this.setState({ extra });
+    }
+
     changeValue = (par, event, index1, index2 = undefined) => {
-        const value = +event.target.value;
+        const value = event.target.value;
         switch(par) {
             case 'Ii': {
                 this.state.Ii[index1] = value;
@@ -167,11 +174,17 @@ export class Main extends Component {
                 this.setState({ A: this.state.A });
                 break;
             };
-            case 'extra': {
-                this.state.extra[index1] = value;
-                this.setState({ extra: this.state.extra });
+            case 'limitations': {
+                this.state.limitations[index1][index2] = value;
+                this.setState({ limitations: this.state.limitations });
                 break;
             };
+            /* case 'extra': {
+                console.log(value, index1, index2)
+                this.state.extra[index1][index2] = value;
+                
+                break;
+            }; */
         }
     }
 
@@ -249,14 +262,28 @@ export class Main extends Component {
                     </div>
                 </div>
 
-                {this.state.mode === 3 && (<div style={{ display: "flex", marginTop: "15px" }}>
+                <div style={{ /* display: "flex", */ marginTop: "15px" }}>
+                    <b style={{ /* width: "150px" */ }} >Ограничения: </b>
+                    <div style={{ marginLeft: "5px", /* border: "solid black 3px" *//* , width: "50%" */ }}>
+                        {this.state.limitations.map((elem, index1) => (
+                            <div style={{ display: "flex", /* border: "solid black 1px" */ }}>
+                                <TextField onChange={(event) => this.changeValue("limitations", event, index1, 0)} style={{ border: "solid black 1px", marginLeft: "10px", marginRight: "10px" }} value={elem[0]} id="standard-basic" />
+                                {`<= x${index1} <=`}
+                                <TextField onChange={(event) => this.changeValue("limitations", event, index1, 1)} style={{ border: "solid black 1px", marginLeft: "10px" }} value={elem[1]} id="standard-basic" />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* {this.state.mode === 3 && (<div style={{ display: "flex", marginTop: "15px" }}>
                     <b style={{ width: "90px" }} >Доп. значения: </b>
                     <div style={{ display: "flex", border: "solid black 3px", width: "30%" }}>
                         {this.state.extra.map((i, index) => (
                             <TextField onChange={(event) => this.changeValue("A", event, index)} style={{ border: "solid black 1px", marginLeft: "10px" }} value={i} id="standard-basic" />
                         ))}
                     </div>
-                </div>)}
+                </div>)} */}
+                <Extra paramsCout={this.state.paramsCout} changeExtra={this.changeExtra} />
 
                 <Button style={{ marginTop: "15px", marginLeft: "10px" }} variant="contained" color="primary" onClick={() => this.populateWeatherData()}>Решить</Button>
 
@@ -291,13 +318,14 @@ export class Main extends Component {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                count: this.state.paramsCout,
-                Ii: this.state.Ii,
-                w: this.state.w,
-                d: this.state.d,
-                b: this.state.b,
-                A: this.state.A,
-                extra: this.state.mode === 3 ? this.state.extra : null,
+                count: +this.state.paramsCout,
+                Ii: this.state.Ii.map(e => +e),
+                w: this.state.w.map(e => +e),
+                d: this.state.d.map(e => +e),
+                b: this.state.b.map(e => +e),
+                A: this.state.A.map(e => e.map(ee => +ee)),
+                extra: this.state.extra ? this.state.extra.map(e => e.map(ee => +ee)) : null,
+                limitations: this.state.limitations.map(e => e.map(ee => +ee))
             })
         };
         const response = await fetch('solver', requestOptions);

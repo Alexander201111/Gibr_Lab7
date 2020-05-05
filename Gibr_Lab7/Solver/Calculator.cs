@@ -5,7 +5,7 @@ namespace Gibr_Lab7.Solver
 {
     public class Calculator : ICalculator
     {
-        public double[] Solving(int count, double[] Ii, double[] w, double[] d, double[] b, double[][] A, LinearConstraint newConstraints = null)
+        public double[] Solving(int count, double[] Ii, double[] w, double[] d, double[] b, double[][] A, List<LinearConstraint> constraints, double[][] extra)
         {
             double[,] I = new double[count, count];
             double[,] W = new double[count, count];
@@ -46,22 +46,29 @@ namespace Gibr_Lab7.Solver
                 combinedAs.Add(a);
             }
 
-            List<LinearConstraint> constraints = new List<LinearConstraint>();
+            if (extra != null)
+            {
+                for (int i = 0; i < extra.Length; i++)
+                {
+                    constraints.Add(new LinearConstraint(numberOfVariables: count)
+                    {
+                        VariablesAtIndices = VariablesAtIndices,
+                        CombinedAs = extra[i],
+                        ShouldBe = ConstraintType.EqualTo,
+                        Value = 0
+                    });
+                }
+            }
+
             for (int i = 0; i < 3; i++)
             {
-                LinearConstraint linear = new LinearConstraint(numberOfVariables: count)
+                constraints.Add(new LinearConstraint(numberOfVariables: count)
                 {
                     VariablesAtIndices = VariablesAtIndices,
                     CombinedAs = combinedAs[i],
                     ShouldBe = ConstraintType.EqualTo,
                     Value = b[i]
-                };
-                constraints.Add(linear);
-            }
-
-            if (newConstraints != null)
-            {
-                constraints.Add(newConstraints);
+                });
             }
 
             var solver = new GoldfarbIdnani(

@@ -2,6 +2,7 @@ using Accord.Math.Optimization;
 using Gibr_Lab7.Solver;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 
 namespace Gibr_Lab7Test
 {
@@ -107,16 +108,18 @@ namespace Gibr_Lab7Test
                 new double[] { 0, 0, 0, 0, 1, -1, -1, 1 }
             };
 
-            LinearConstraint linear = new LinearConstraint(numberOfVariables: 2)
+            List<LinearConstraint> list = new List<LinearConstraint>();
+
+            list.Add(new LinearConstraint(numberOfVariables: 2)
             {
                 VariablesAtIndices = new int[] { 0, 1 },
                 CombinedAs = new double[] { 1, -10},
                 ShouldBe = ConstraintType.EqualTo,
                 Value = 0
-            };
+            });
 
             Calculator calculator = new Calculator();
-            double[] res = calculator.Solving(count, Ii, w, d, b, A, linear);
+            double[] res = calculator.Solving(count, Ii, w, d, b, A, list);
             bool check = true;
             for (int i = 0; i < 3; i++)
             {
