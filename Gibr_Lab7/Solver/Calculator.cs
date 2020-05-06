@@ -5,8 +5,9 @@ namespace Gibr_Lab7.Solver
 {
     public class Calculator : ICalculator
     {
-        public double[] Solving(int count, double[] Ii, double[] w, double[] d, double[] b, double[][] A, List<LinearConstraint> constraints, double[][] extra)
+        public double[] Solving(int count, double[] Ii, double[] w, double[] d, double[] b, double[][] A, List<LinearConstraint> constraints = null, double[][] extra = null)
         {
+            #region Calculate matrix
             double[,] I = new double[count, count];
             double[,] W = new double[count, count];
             for (int i = 0; i < w.Length; i++)
@@ -45,6 +46,13 @@ namespace Gibr_Lab7.Solver
                 }
                 combinedAs.Add(a);
             }
+            #endregion
+
+            #region Forming conditions
+            if (constraints == null)
+            {
+                constraints = new List<LinearConstraint>();
+            }
 
             if (extra != null)
             {
@@ -70,12 +78,12 @@ namespace Gibr_Lab7.Solver
                     Value = b[i]
                 });
             }
+            #endregion
 
             var solver = new GoldfarbIdnani(
                 function: new QuadraticObjectiveFunction(Q, D),
                 constraints: constraints);
 
-            bool success = solver.Minimize();
             double[] solution = solver.Solution;
             return solution;
         }

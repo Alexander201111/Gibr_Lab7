@@ -11,6 +11,7 @@ namespace Gibr_Lab7Test
         [Test]
         public void Test_Original()
         {
+            #region Init Params
             int count = 7;
             double[] Ii = { 1, 1, 1, 1, 1, 1, 1 };
             double[] w = { 0.2, 0.121, 0.683, 0.04, 0.102, 0.081, 0.02 };
@@ -31,6 +32,7 @@ namespace Gibr_Lab7Test
                 new double[] { 0, 0, 1, -1, -1, 0, 0 },
                 new double[] { 0, 0, 0, 0, 1, -1, -1 }
             };
+            #endregion
 
             Calculator calculator = new Calculator();
             double[] res = calculator.Solving(count, Ii, w, d, b, A);
@@ -48,6 +50,7 @@ namespace Gibr_Lab7Test
         [Test]
         public void Test_V2()
         {
+            #region Init Params
             int count = 8;
             double[] Ii = { 1, 1, 1, 1, 1, 1, 1, 1 };
             double[] w = { 0.2, 0.121, 0.683, 0.04, 0.102, 0.081, 0.02, 0.667 };
@@ -69,6 +72,7 @@ namespace Gibr_Lab7Test
                 new double[] { 0, 0, 1, -1, -1, 0, 0, 0 },
                 new double[] { 0, 0, 0, 0, 1, -1, -1, 1 }
             };
+            #endregion
 
             Calculator calculator = new Calculator();
             double[] res = calculator.Solving(count, Ii, w, d, b, A);
@@ -86,6 +90,7 @@ namespace Gibr_Lab7Test
         [Test]
         public void Test_10P1EqualP2()
         {
+            #region Init Params
             int count = 8;
             double[] Ii = { 1, 1, 1, 1, 1, 1, 1, 1 };
             double[] w = { 0.2, 0.121, 0.683, 0.04, 0.102, 0.081, 0.02, 0.667 };
@@ -117,6 +122,7 @@ namespace Gibr_Lab7Test
                 ShouldBe = ConstraintType.EqualTo,
                 Value = 0
             });
+            #endregion
 
             Calculator calculator = new Calculator();
             double[] res = calculator.Solving(count, Ii, w, d, b, A, list);
