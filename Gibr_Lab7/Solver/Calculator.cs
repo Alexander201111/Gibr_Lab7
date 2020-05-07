@@ -84,6 +84,7 @@ namespace Gibr_Lab7.Solver
                 function: new QuadraticObjectiveFunction(Q, D),
                 constraints: constraints);
 
+            bool success = solver.Minimize();
             double[] solution = solver.Solution;
             return solution;
         }

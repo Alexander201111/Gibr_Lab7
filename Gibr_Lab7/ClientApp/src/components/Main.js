@@ -8,6 +8,7 @@ export class Main extends Component {
         super(props);
         this.state = {
             mode: 1,
+            includeLimitations: false,
             paramsCout: 7,
             Ii: [1, 1, 1, 1, 1, 1, 1],
             w: [0.2, 0.121, 0.683, 0.04, 0.102, 0.081, 0.02],
@@ -28,7 +29,7 @@ export class Main extends Component {
             ],
             extra: [],
             limitations: [
-                [-100, 100], [1, 1], [0, 100], [0, 100],
+                [0, 100], [1, 1], [0, 100], [0, 100],
                 [0, 100], [0, 100], [0, 100],
             ],
             result: [],
@@ -47,7 +48,6 @@ export class Main extends Component {
         const w = new Array(this.state.paramsCout);
         const d = new Array(this.state.paramsCout);
         const b = new Array(this.state.paramsCout);
-        const extra = [0, 0];
         for (let i = 0; i < this.state.paramsCout; i++) {
             Ii[i] = 0;
             w[i] = 0;
@@ -62,7 +62,7 @@ export class Main extends Component {
             }
             A.push(a);
         }
-        this.setState({ Ii, w, d, b, A, extra, result });
+        this.setState({ Ii, w, d, b, A, result });
     }
 
     initDataForTask = (val) => {
@@ -134,8 +134,7 @@ export class Main extends Component {
                     [0, 0, 1, -1, -1, 0, 0, 0],
                     [0, 0, 0, 0, 1, -1, -1, 1],
                 ];
-                const extra = [1, -10];
-                this.setState({ mode, paramsCout, Ii, w, d, b, A, extra, result });
+                this.setState({ mode, paramsCout, Ii, w, d, b, A, result });
                 break;
             }
             default: return;
@@ -148,7 +147,7 @@ export class Main extends Component {
 
     changeValue = (par, event, index1, index2 = undefined) => {
         const value = event.target.value;
-        switch(par) {
+        switch (par) {
             case 'Ii': {
                 this.state.Ii[index1] = value;
                 this.setState({ Ii: this.state.Ii });
@@ -179,13 +178,11 @@ export class Main extends Component {
                 this.setState({ limitations: this.state.limitations });
                 break;
             };
-            /* case 'extra': {
-                console.log(value, index1, index2)
-                this.state.extra[index1][index2] = value;
-                
-                break;
-            }; */
         }
+    }
+
+    changeCheckBox = () => {
+        this.setState({ includeLimitations: !this.state.includeLimitations });
     }
 
     render() {
@@ -210,7 +207,6 @@ export class Main extends Component {
 
                     <Button style={{ marginLeft: "20px" }} variant="contained" color="primary" onClick={() => this.initDataForTask(1)}>Original</Button>
                     <Button style={{ marginLeft: "5px", marginRight: "5px" }} variant="contained" color="primary" onClick={() => this.initDataForTask(2)}>V2</Button>
-                    <Button variant="contained" color="primary" onClick={() => this.initDataForTask(3)}>T3</Button>
                 </div>
 
                 <div style={{ display: "flex", marginTop: "15px" }}>
@@ -262,27 +258,27 @@ export class Main extends Component {
                     </div>
                 </div>
 
-                <div style={{ /* display: "flex", */ marginTop: "15px" }}>
-                    <b style={{ /* width: "150px" */ }} >Ограничения: </b>
-                    <div style={{ marginLeft: "5px", /* border: "solid black 3px" *//* , width: "50%" */ }}>
-                        {this.state.limitations.map((elem, index1) => (
-                            <div style={{ display: "flex", /* border: "solid black 1px" */ }}>
-                                <TextField onChange={(event) => this.changeValue("limitations", event, index1, 0)} style={{ border: "solid black 1px", marginLeft: "10px", marginRight: "10px" }} value={elem[0]} id="standard-basic" />
-                                {`<= x${index1} <=`}
-                                <TextField onChange={(event) => this.changeValue("limitations", event, index1, 1)} style={{ border: "solid black 1px", marginLeft: "10px" }} value={elem[1]} id="standard-basic" />
-                            </div>
-                        ))}
+                <div style={{ marginTop: "15px" }}>
+                    <div>
+                        <b style={{ marginLeft: "10px" }}>Включить ограничения:</b>
+                        <input type="checkbox" checked={this.state.includeLimitations} onClick={this.changeCheckBox} />
                     </div>
+                    {this.state.includeLimitations && (
+                        <div>
+                            <b style={{ marginLeft: "10px" }}>Ограничения: </b>
+                            <div style={{ marginLeft: "5px" }}>
+                                {this.state.limitations.map((elem, index1) => (
+                                    <div style={{ display: "flex" }}>
+                                        <TextField onChange={(event) => this.changeValue("limitations", event, index1, 0)} style={{ border: "solid black 1px", marginLeft: "10px", marginRight: "10px" }} value={elem[0]} id="standard-basic" />
+                                        {`<= x${index1} <=`}
+                                        <TextField onChange={(event) => this.changeValue("limitations", event, index1, 1)} style={{ border: "solid black 1px", marginLeft: "10px" }} value={elem[1]} id="standard-basic" />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
 
-                {/* {this.state.mode === 3 && (<div style={{ display: "flex", marginTop: "15px" }}>
-                    <b style={{ width: "90px" }} >Доп. значения: </b>
-                    <div style={{ display: "flex", border: "solid black 3px", width: "30%" }}>
-                        {this.state.extra.map((i, index) => (
-                            <TextField onChange={(event) => this.changeValue("A", event, index)} style={{ border: "solid black 1px", marginLeft: "10px" }} value={i} id="standard-basic" />
-                        ))}
-                    </div>
-                </div>)} */}
                 <Extra paramsCout={this.state.paramsCout} changeExtra={this.changeExtra} />
 
                 <Button style={{ marginTop: "15px", marginLeft: "10px" }} variant="contained" color="primary" onClick={() => this.populateWeatherData()}>Решить</Button>
@@ -324,8 +320,8 @@ export class Main extends Component {
                 d: this.state.d.map(e => +e),
                 b: this.state.b.map(e => +e),
                 A: this.state.A.map(e => e.map(ee => +ee)),
-                extra: this.state.extra ? this.state.extra.map(e => e.map(ee => +ee)) : null,
-                limitations: this.state.limitations.map(e => e.map(ee => +ee))
+                extra: this.state.extra && this.state.extra.length ? this.state.extra.map(e => e.map(ee => +ee)) : null,
+                limitations: this.state.includeLimitations ? this.state.limitations.map(e => e.map(ee => +ee)) : null
             })
         };
         const response = await fetch('solver', requestOptions);

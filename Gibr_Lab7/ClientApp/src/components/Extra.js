@@ -6,8 +6,8 @@ export default class Extra extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            extraCount: 1,
-            extra: [[1, -10, 0, 0, 0, 0, 0]],
+            extraCount: 0,
+            extra: [],
         };
     }
 
@@ -18,8 +18,8 @@ export default class Extra extends Component {
     changeCountParams = (event) => {
         const extraCount = event.target.value;
         let extra;
-        if(extraCount == 0) {
-            extra = undefined
+        if (extraCount == 0) {
+            extra = []
         } else {
             extra = new Array(extraCount).fill(0).map(() => new Array(this.props.paramsCout).fill(0));
         }
@@ -53,18 +53,20 @@ export default class Extra extends Component {
                     <TextField value={this.state.extraCount} onChange={this.changeCountParams} style={{ marginLeft: "10px", marginRight: "10px" }} id="standard-basic" />
                 </div>
 
-                {this.state.extra && <div style={{ display: "flex", marginTop: "15px" }}>
-                    <b style={{ width: "120px" }} >Доп. ограничения: </b>
-                    <div style={{ border: "solid black 3px", width: "50%" }}>
-                        {this.state.extra.map((elem, index1) => (
-                            <div style={{ display: "flex" }}>
-                                {elem.map((i, index2) => (
-                                    <TextField onChange={(event) => this.changeValue(event, index1, index2)} style={{ border: "solid black 1px", marginLeft: "10px" }} value={i} id="standard-basic" />
-                                ))}
-                            </div>
-                        ))}
+                {this.state.extraCount !== 0 && this.state.extra && (
+                    <div style={{ display: "flex", marginTop: "15px" }}>
+                        <b style={{ width: "120px" }} >Доп. ограничения: </b>
+                        <div style={{ border: "solid black 3px", width: "50%" }}>
+                            {this.state.extra.map((elem, index1) => (
+                                <div style={{ display: "flex" }}>
+                                    {elem.map((i, index2) => (
+                                        <TextField onChange={(event) => this.changeValue(event, index1, index2)} style={{ border: "solid black 1px", marginLeft: "10px" }} value={i} id="standard-basic" />
+                                    ))}
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                </div>}
+                )}
             </div>
         );
     }
