@@ -16,7 +16,7 @@ namespace Gibr_Lab7.Solver
                 {
                     if (j == i)
                     {
-                        W[i, j] = 1 / (w[i] * w[i]);
+                        W[i, j] = w[i] != 0 ? ( 1 / (w[i] * w[i])) : 0;
                         I[i, j] = Ii[i];
                     }
                     else

@@ -29,8 +29,8 @@ export class Main extends Component {
             ],
             extra: [],
             limitations: [
-                [0, 100], [1, 1], [0, 100], [0, 100],
-                [0, 100], [0, 100], [0, 100],
+                { min: 0, max: 100 }, { min: 1, max: 1 }, { min: 0, max: 100 }, { min: 0, max: 100 },
+                { min: 0, max: 100 }, { min: 0, max: 100 }, { min: 0, max: 100 },
             ],
             result: [],
             check: false,
@@ -269,9 +269,9 @@ export class Main extends Component {
                             <div style={{ marginLeft: "5px" }}>
                                 {this.state.limitations.map((elem, index1) => (
                                     <div style={{ display: "flex" }}>
-                                        <TextField onChange={(event) => this.changeValue("limitations", event, index1, 0)} style={{ border: "solid black 1px", marginLeft: "10px", marginRight: "10px" }} value={elem[0]} id="standard-basic" />
+                                        <TextField onChange={(event) => this.changeValue("limitations", event, index1, "min")} style={{ border: "solid black 1px", marginLeft: "10px", marginRight: "10px" }} value={elem.min} id="standard-basic" />
                                         {`<= x${index1} <=`}
-                                        <TextField onChange={(event) => this.changeValue("limitations", event, index1, 1)} style={{ border: "solid black 1px", marginLeft: "10px" }} value={elem[1]} id="standard-basic" />
+                                        <TextField onChange={(event) => this.changeValue("limitations", event, index1, "max")} style={{ border: "solid black 1px", marginLeft: "10px" }} value={elem.max} id="standard-basic" />
                                     </div>
                                 ))}
                             </div>
@@ -321,7 +321,7 @@ export class Main extends Component {
                 b: this.state.b.map(e => +e),
                 A: this.state.A.map(e => e.map(ee => +ee)),
                 extra: this.state.extra && this.state.extra.length ? this.state.extra.map(e => e.map(ee => +ee)) : null,
-                limitations: this.state.includeLimitations ? this.state.limitations.map(e => e.map(ee => +ee)) : null
+                limitations: this.state.includeLimitations ? this.state.limitations.map(e => ({ min: +e.min, max: +e.max })) : null
             })
         };
         const response = await fetch('solver', requestOptions);

@@ -19,22 +19,23 @@ namespace Gibr_Lab7.Controllers
             {
                 for (int i = 0; i < data.limitations.Length; i++)
                 {
-                    for (int j = 0; j < data.limitations[i].Length; j++)
+                    linear.Add(new LinearConstraint(numberOfVariables: 1)
                     {
-                        ConstraintType shouldBe = j == 0 ? ConstraintType.GreaterThanOrEqualTo : ConstraintType.LesserThanOrEqualTo;
-                        double Value = data.limitations[i][j];
-                        linear.Add(new LinearConstraint(numberOfVariables: 1)
-                        {
-                            VariablesAtIndices = new int[] { i },
-                            ShouldBe = shouldBe,
-                            Value = Value
-                        });
-                    }
+                        VariablesAtIndices = new int[] { i },
+                        ShouldBe = ConstraintType.GreaterThanOrEqualTo,
+                        Value = data.limitations[i].min
+                    });
+                    linear.Add(new LinearConstraint(numberOfVariables: 1)
+                    {
+                        VariablesAtIndices = new int[] { i },
+                        ShouldBe = ConstraintType.LesserThanOrEqualTo,
+                        Value = data.limitations[i].max
+                    });
                 }
             }
 
             Calculator calculator = new Calculator();
-            double[] res = calculator.Solving(data.count, data.Ii, data.w, data.d, data.b, data.A, null, data.extra);
+            double[] res = calculator.Solving(data.count, data.Ii, data.w, data.d, data.b, data.A, linear, data.extra);
             return res;
         }
     }
