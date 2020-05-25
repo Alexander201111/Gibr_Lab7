@@ -25,5 +25,17 @@
 
         /// <summary>Ограничения значений</summary>
         public Limitation[] limitations { get; set; }
+
+        public ForSolver(int _count, double[] _Ii, double[] _w, double[] _d, double[] _b, double[][] _A, double[][] _extra = null, Limitation[] _limitations = null)
+        {
+            count = _count;
+            Ii = _Ii;
+            w = _w;
+            d = _d;
+            b = _b;
+            A = _A;
+            extra = _extra;
+            limitations = _limitations;
+        }
     }
 }

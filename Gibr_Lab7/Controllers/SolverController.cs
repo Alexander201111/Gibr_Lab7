@@ -12,7 +12,7 @@ namespace Gibr_Lab7.Controllers
         public SolverController() { }
 
         [HttpPost]
-        public double[] Solve([FromBody]ForSolver data)
+        public Result Solve([FromBody]ForSolver data)
         {
             List<LinearConstraint> linear = new List<LinearConstraint>();
             if (data.limitations != null)
@@ -35,7 +35,7 @@ namespace Gibr_Lab7.Controllers
             }
 
             Calculator calculator = new Calculator();
-            double[] res = calculator.Solving(data.count, data.Ii, data.w, data.d, data.b, data.A, linear, data.extra);
+            Result res = calculator.Solving(data.count, data.Ii, data.w, data.d, data.b, data.A, linear, data.extra);
             return res;
         }
     }

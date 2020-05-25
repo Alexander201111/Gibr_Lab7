@@ -1,4 +1,5 @@
 using Accord.Math.Optimization;
+using Gibr_Lab7;
 using Gibr_Lab7.Solver;
 using NUnit.Framework;
 using System;
@@ -35,16 +36,9 @@ namespace Gibr_Lab7Test
             #endregion
 
             Calculator calculator = new Calculator();
-            double[] res = calculator.Solving(count, Ii, w, d, b, A);
-            bool check = true;
-            for (int i = 0; i < 3; i++)
-            {
-                double resultForCheck = 0;
-                for(int j=0; j<count; j++) { resultForCheck += res[j] * A[i][j]; }
-                if (Math.Round(resultForCheck) != 0) { check = false; break; }
-            }
+            Result res = calculator.Solving(count, Ii, w, d, b, A);
 
-            Assert.AreEqual(true, check);
+            Assert.AreEqual(true, res.reduced);
         }
 
         [Test]
@@ -75,16 +69,16 @@ namespace Gibr_Lab7Test
             #endregion
 
             Calculator calculator = new Calculator();
-            double[] res = calculator.Solving(count, Ii, w, d, b, A);
-            bool check = true;
-            for (int i = 0; i < 3; i++)
-            {
-                double resultForCheck = 0;
-                for (int j = 0; j < count; j++) { resultForCheck += res[j] * A[i][j]; }
-                if (Math.Round(resultForCheck) != 0) { check = false; break; }
-            }
+            Result res = calculator.Solving(count, Ii, w, d, b, A);
+            //bool check = true;
+            //for (int i = 0; i < 3; i++)
+            //{
+            //    double resultForCheck = 0;
+            //    for (int j = 0; j < count; j++) { resultForCheck += res[j] * A[i][j]; }
+            //    if (Math.Round(resultForCheck) != 0) { check = false; break; }
+            //}
 
-            Assert.AreEqual(true, check);
+            Assert.AreEqual(true, res.reduced);
         }
 
         [Test]
@@ -125,16 +119,16 @@ namespace Gibr_Lab7Test
             #endregion
 
             Calculator calculator = new Calculator();
-            double[] res = calculator.Solving(count, Ii, w, d, b, A, list);
-            bool check = true;
-            for (int i = 0; i < 3; i++)
-            {
-                double resultForCheck = 0;
-                for (int j = 0; j < count; j++) { resultForCheck += res[j] * A[i][j]; }
-                if (Math.Round(resultForCheck) != 0) { check = false; break; }
-            }
+            Result res = calculator.Solving(count, Ii, w, d, b, A, list);
+            //bool check = true;
+            //for (int i = 0; i < 3; i++)
+            //{
+            //    double resultForCheck = 0;
+            //    for (int j = 0; j < count; j++) { resultForCheck += res[j] * A[i][j]; }
+            //    if (Math.Round(resultForCheck) != 0) { check = false; break; }
+            //}
 
-            Assert.AreEqual(true, check);
+            Assert.AreEqual(true, res.reduced);
         }
     }
 }

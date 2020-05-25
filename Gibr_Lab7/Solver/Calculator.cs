@@ -5,7 +5,7 @@ namespace Gibr_Lab7.Solver
 {
     public class Calculator : ICalculator
     {
-        public double[] Solving(int count, double[] Ii, double[] w, double[] d, double[] b, double[][] A, List<LinearConstraint> constraints = null, double[][] extra = null)
+        public Result Solving(int count, double[] Ii, double[] w, double[] d, double[] b, double[][] A, List<LinearConstraint> constraints = null, double[][] extra = null)
         {
             #region Calculate matrix
             double[,] I = new double[count, count];
@@ -86,7 +86,8 @@ namespace Gibr_Lab7.Solver
 
             bool success = solver.Minimize();
             double[] solution = solver.Solution;
-            return solution;
+            Result result = new Result(solution, success);
+            return result;
         }
     }
 }

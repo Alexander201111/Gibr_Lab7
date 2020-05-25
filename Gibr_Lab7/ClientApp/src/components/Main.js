@@ -201,7 +201,7 @@ export class Main extends Component {
         return (
             <div>
                 <div style={{ display: "flex", alignItems: "baseline" }}>
-                    Количество:
+                    Количество потоков:
                     <TextField value={paramsCout} onChange={this.changeCountParams} style={{ marginLeft: "10px", marginRight: "10px" }} id="standard-basic" />
                     <Button variant="contained" color="primary" onClick={() => this.setCountParams()}>Построить</Button>
 
@@ -209,8 +209,8 @@ export class Main extends Component {
                     <Button style={{ marginLeft: "5px", marginRight: "5px" }} variant="contained" color="primary" onClick={() => this.initDataForTask(2)}>V2</Button>
                 </div>
 
-                <div style={{ display: "flex", marginTop: "15px" }}>
-                    <b style={{ width: "30px" }} >i:</b>
+                <div style={{ /*display: "flex",*/ marginTop: "15px" }}>
+                    <b style={{ width: "30px" }} >Показатель измеряемости счетчиков:</b>
                     <div style={{ display: "flex", border: "solid black 3px", width: "40%" }}>
                         {this.state.Ii.map((i, index) => (
                             <TextField onChange={(event) => this.changeValue("Ii", event, index)} style={{ border: "solid black 1px", marginLeft: "10px" }} value={i} id="standard-basic" />
@@ -218,8 +218,8 @@ export class Main extends Component {
                     </div>
                 </div>
 
-                <div style={{ display: "flex", marginTop: "15px" }}>
-                    <b style={{ width: "30px" }} >w: </b>
+                <div style={{ /*display: "flex",*/ marginTop: "15px" }}>
+                    <b style={{ width: "30px" }} >Погрешность: </b>
                     <div style={{ display: "flex", border: "solid black 3px", width: "70%" }}>
                         {this.state.w.map((i, index) => (
                             <TextField onChange={(event) => this.changeValue("w", event, index)} style={{ border: "solid black 1px", marginLeft: "10px" }} value={i} id="standard-basic" />
@@ -227,8 +227,8 @@ export class Main extends Component {
                     </div>
                 </div>
 
-                <div style={{ display: "flex", marginTop: "15px" }}>
-                    <b style={{ width: "30px" }} >d: </b>
+                <div style={{ /*display: "flex",*/ marginTop: "15px" }}>
+                    <b style={{ width: "30px" }} >Значения, замеренные счетчиком: </b>
                     <div style={{ display: "flex", border: "solid black 3px", width: "70%" }}>
                         {this.state.d.map((i, index) => (
                             <TextField onChange={(event) => this.changeValue("d", event, index)} style={{ border: "solid black 1px", marginLeft: "10px" }} value={i} id="standard-basic" />
@@ -236,8 +236,8 @@ export class Main extends Component {
                     </div>
                 </div>
 
-                <div style={{ display: "flex", marginTop: "15px" }}>
-                    <b style={{ width: "30px" }} >b: </b>
+                <div style={{ /*display: "flex",*/ marginTop: "15px" }}>
+                    <b style={{ width: "30px" }} >Результат суммы потоков для узла: </b>
                     <div style={{ display: "flex", border: "solid black 3px", width: "30%" }}>
                         {this.state.b.map((i, index) => (
                             <TextField onChange={(event) => this.changeValue("b", event, index)} style={{ border: "solid black 1px", marginLeft: "10px" }} value={i} id="standard-basic" />
@@ -245,8 +245,8 @@ export class Main extends Component {
                     </div>
                 </div>
 
-                <div style={{ display: "flex", marginTop: "15px" }}>
-                    <b style={{ width: "30px" }} >A: </b>
+                <div style={{ /*display: "flex",*/ marginTop: "15px" }}>
+                    <b style={{ width: "30px" }} >Направление потока для каждого узла: </b>
                     <div style={{ border: "solid black 3px", width: "50%" }}>
                         {this.state.A.map((elem, index1) => (
                             <div style={{ display: "flex", /* border: "solid black 1px" */ }}>
@@ -327,13 +327,13 @@ export class Main extends Component {
         const response = await fetch('solver', requestOptions);
         const result = await response.json();
 
-        let check = true;
-        for (let i = 0; i < 3; i++) {
-            let resultForCheck = 0;
-            for (let j = 0; j < this.state.paramsCout; j++) { resultForCheck += result[j] * this.state.A[i][j]; }
-            if (Math.round(resultForCheck) != 0) { check = false; break; }
-        }
+        //let check = result.reduce;
+        //for (let i = 0; i < 3; i++) {
+        //    let resultForCheck = 0;
+        //    for (let j = 0; j < this.state.paramsCout; j++) { resultForCheck += result[j] * this.state.A[i][j]; }
+        //    if (Math.round(resultForCheck) != 0) { check = false; break; }
+        //}
 
-        this.setState({ result, check });
+        this.setState({ result: result.solution, check: result.reduced });
     }
 }
