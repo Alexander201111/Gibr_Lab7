@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gibr_Lab7", "Gibr_Lab7\Gibr_Lab7.csproj", "{E8B92EC1-C374-47D1-B747-E3485D113A4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gibr_Lab7Test", "Gibr_Lab7Test\Gibr_Lab7Test.csproj", "{83365267-CB3F-4251-B9D8-F13989851BCC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gibr_Lab7Test", "Gibr_Lab7Test\Gibr_Lab7Test.csproj", "{83365267-CB3F-4251-B9D8-F13989851BCC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

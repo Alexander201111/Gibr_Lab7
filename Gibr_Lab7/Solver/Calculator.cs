@@ -1,10 +1,57 @@
 ﻿using System.Collections.Generic;
 using Accord.Math.Optimization;
+using Gibr_Lab7.Models;
 
 namespace Gibr_Lab7.Solver
 {
     public class Calculator : ICalculator
     {
+        public Result SolverNotArrays(int countNodes, Flow[] flows)
+        {
+            int count = flows.Length;
+            double[] Ii = new double[count];
+            double[] w = new double[count];
+            double[] d = new double[count];
+            double[][] a = new double[count][];
+            for (int i=0; i<count; i++)
+            {
+                Ii[i] = 1;
+                w[i] = flows[i].w;
+                d[i] = flows[i].D;
+                a[i] = new double[countNodes];
+                for(int j=0; j<countNodes; j++)
+                {
+                    if(flows[i].source == j+1)
+                    {
+                        a[i][j] = -1;
+                    }
+                    if (flows[i].dest == j+1)
+                    {
+                        a[i][j] = 1;
+                    }
+                }
+            }
+
+            double[][] A = new double[countNodes][];
+            for (int i = 0; i < countNodes; i++)
+            {
+                A[i] = new double[count];
+                for (int j = 0; j < count; j++)
+                {
+                    A[i][j] = a[j][i];
+                }
+            }
+
+            double[] b = new double[countNodes];
+            for (int i = 0; i < countNodes; i++)
+            {
+                b[i] = 0.0;
+            }
+
+
+            return Solving(count, Ii, w, d, b, A);
+        }
+
         public Result Solving(int count, double[] Ii, double[] w, double[] d, double[] b, double[][] A, List<LinearConstraint> constraints = null, double[][] extra = null)
         {
             #region Calculate matrix
@@ -68,7 +115,7 @@ namespace Gibr_Lab7.Solver
                 }
             }
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < b.Length; i++)
             {
                 constraints.Add(new LinearConstraint(numberOfVariables: count)
                 {
